@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>键盘导航栏</title>
+</head>
+<body>
+    <header></header>
+    <main>
+      
+        <div class="wrapper" id="main"></div>
+        <!-- id mainxxx 里插了三个div 现在等于把三个div移到了wrapper里面 -->
+    </main>
+    <footer></footer>
+    <script>
+    //1.初始化数据
+        var keys={
+            0:{0:'q',1:'w',2:'e',3:'r',4:'t',5:'y',6:'u',7:'i',8:'o',9:'p',length:10},
+            1:{0:'a',1:'s',2:'d',3:'f',4:'g',5:'h',6:'j',7:'k',8:'l',length:9},
+            2:{0:'z',1:'x',2:'c',3:'v',4:'b',5:'n',6:'m',length:7},
+            length:3
+        }
+        var hash = {
+            'q':'qq.com',
+            'w':'weibo.com',
+            'e':'ele.me',
+            'r':'renren.com',
+            't':'tianya.com',
+            'y':'youtube',
+            'u':'uc.com',
+            'i':'iciba.com',
+            'o':'opera.com',
+            'p': undefined,
+            'a':'acfun.tv',
+            's':'souhu.com',
+            'z':'zhihu.com',
+            'm':'www.mcdonalds.com',
+            'b':'bilibili.com'
+        }
+    //取出存在localStorage 中的uuu对应的hash
+    var hashInLocalStorage = JSON.parse(localStorage.getItem('uuu') || 'null')
+    if(hashInLocalStorage){
+        hash = hashInLocalStorage
+    }
+    
+        //2.生成键盘
+       /* 创建三个div 在div内创建kbd标签*/
+        var index = 0
+        while(index< keys['length']){  
+        /* 当index小于keyslength的值时进入这个循环 keyslength的值是0 1 2 */
+           var  div = document.createElement('div')    
+        /*  创建一个名为div1容器把div放到里面 */
+           div.className = 'row'
+            main.appendChild(div)              
+        /* 給main一个id 通过id把div放到main里面 做main的儿子 */
+            var row = keys[index]
+        /* 把每个数组赋值給row 来决定每行的数量. */
+            index = index + 1
+        
+        var index2 = 0
+        while(index2< row['length']){  // 0-9 0-8 0-6
+        /*row['length']代表这一行的长度 决定每一行kbd的数量 */
+        var kbd = document.createElement('kbd')
+        /* 创建一个kbd标签放进一个叫kbd的容器中  */
+        var span = document .createElement('span')
+            span.textContent = row[index2]
+            kbd.appendChild(span)
+            span.className = 'text'
+        /* KBD中的文本为 */
+        kbd.className = 'key'   //API  在style中写class名为key的样式 再把样式加到kbd中
+        div.appendChild(kbd)
+        /* 把kbd放进div标签内 */
+        var button = document.createElement('button')
+           kbd.appendChild(button)
+           button.textContent = '编辑'
+           button.id = row[index2]
+
+           var img = document.createElement('img')
+           if(hash[row[index2]]){
+            img.src = 'http://' + hash[row[index2]] +'/favicon.ico'
+           }else{
+               img.src = '//i.postimg.cc/nVK2JGL4/OIP-C1.jpg'
+           }
+           img.onerror =function(xxx){
+               xxx.target.src = '//i.postimg.cc/nVK2JGL4/OIP-C1.jpg'
+           }
+           
+           //以上创建一个img标签 从各个hash中取图标
+           kbd.appendChild(img)
+           //把img放入kbd中作为它的儿子
+           //以下是修改键盘网站的代码
+           button.onclick = function(kdfgopfkdgp){     //点击事件
+            var  button2 = kdfgopfkdgp['target']
+            var img2 = button2.previousSibling
+            var key = button2['id']   //用户的取值是Q W E R
+            var x = prompt('给我一个网址')  // 提示用户给我一个网址 把用户输入的网址存到x里面 
+           hash[key] = x               //hash变更
+           img2.src = 'http://' + x +'/favicon.ico'
+           img2.onerror =function(xxx){
+               xxx.target.src = '//i.postimg.cc/nVK2JGL4/OIP-C1.jpg'
+           }
+           localStorage.setItem('uuu', JSON.stringify(hash))      //用户变更就把hash存档
+           }
+        index2 = index2 + 1
+        }
+        }
+
+        //3.监听键盘
+        document.onkeypress = function(xzkjcnxlkcjlk){
+            console.log('我发现你输入了一个键')
+            console.log('你按键后的所有信息是')
+            var  key = xzkjcnxlkcjlk['key']  //q w e 拿到用户按的键
+            var website = hash[key]         //得到这个键对应的网站 
+            console.log(website)        //在控制台输出结果
+            //location.href = 'http://' + website    // 把当前地址变成新的网站
+            window.open('http://' + website,'_blank')
+        }
+    </script>
+</body>
+</html>
